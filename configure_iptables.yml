@@ -1,0 +1,23 @@
+- name: Configure iptables
+  hosts: all
+  become: true
+  
+  tasks:
+    - name: Allow traffic on port 9100 from 123.145.167.254
+      iptables:
+        chain: INPUT
+        protocol: tcp
+        destination_port: 9100
+        source: 123.145.167.254
+        jump: ACCEPT
+    - name: Allow traffic on port ssh from any IP
+      iptables:
+        chain: INPUT
+        protocol: tcp
+        destination_port: 37656
+        jump: ACCEPT
+    - name: Drop all other incoming traffic
+      iptables:
+        chain: INPUT
+        jump: DROP
+
